@@ -1,2 +1,2 @@
-console.log('Hello Node.js')
-console.log('aa06, Redwoods')
+console.log('Hello Arduino Advanced!')
+console.log('aa06, ckddus, 김창연')
