@@ -1,0 +1,19 @@
+{
+  "name": "cds",
+  "version": "1.0.0",
+  "description": "cds_node_project",
+  "main": "cds_node.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "cds",
+    "node"
+  ],
+  "author": "aa06",
+  "license": "MIT",
+  "dependencies": {
+    "serialport": "^9.2.4",
+    "socket.io": "^2.4.1"
+  }
+}
