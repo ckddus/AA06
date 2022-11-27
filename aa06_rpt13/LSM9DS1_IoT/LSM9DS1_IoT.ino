@@ -17,31 +17,37 @@ void loop() {
   delay(500);
   if (IMU.accelerationAvailable()) { // 가속도 센서의 값을 출력합니다.
     IMU.readAcceleration(ax, ay, az); // x, y, z에 각 축별 데이터를 넣습니다.
+//    Serial.print("ACC 센서 - ");
     Serial.print(ax);
     Serial.print(',');
     Serial.print(ay);
     Serial.print(',');
     Serial.print(az);
+ //   Serial.print(" G's");
     Serial.print(',');
   }
 
   if (IMU.gyroscopeAvailable()) { // 자이로 센서의 값을 출력합니다.
     IMU.readGyroscope(gx, gy, gz);
+//    Serial.print("GYRO 센서 - ");
     Serial.print(gx);
     Serial.print(',');
     Serial.print(gy);
     Serial.print(',');
     Serial.print(gz);
+//    Serial.print(" degrees/second");
     Serial.print(',');
   }
   
   if (IMU.magneticFieldAvailable()) { // 지자기 센서의 값을 출력합니다.
     IMU.readMagneticField(mx, my, mz);
+//    Serial.print("MAG 센서 - ");
     Serial.print(mx);
     Serial.print(',');
     Serial.print(my);
     Serial.print(',');
-    Serial.println(mz);
+    Serial.print(mz);
+//    Serial.println(" uT");
   }
    Serial.println();
 }

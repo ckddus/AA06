@@ -47,32 +47,28 @@ void loop() {
     int gesture = APDS.readGesture();
     switch (gesture) {
       case GESTURE_UP:
-        Serial.print("Detected UP gesture");
+        Serial.println("Detected UP gesture : LEDB");
+        digitalWrite(LEDB, LOW);
+        delay(1000);
+        digitalWrite(LEDB, HIGH);
+        break;
+      case GESTURE_DOWN:
+        Serial.println("Detected DOWN gesture : LEDR");
         digitalWrite(LEDR, LOW);
-        Serial.println(": LEDR");
         delay(1000);
         digitalWrite(LEDR, HIGH);
         break;
-      case GESTURE_DOWN:
-        Serial.print("Detected DOWN gesture");
-        digitalWrite(LEDG, LOW);
-        Serial.println(": LEDG");
-        delay(1000);
-        digitalWrite(LEDG, HIGH);
-        break;
       case GESTURE_LEFT:
-        Serial.print("Detected LEFT gesture");
+        Serial.println("Detected LEFT gesture : LEDRG");
         digitalWrite(LEDR, LOW);
         digitalWrite(LEDG, LOW);
-        Serial.println(": LEDRG");
         delay(1000);
         digitalWrite(LEDR, HIGH);
         digitalWrite(LEDG, HIGH);
         break;
       case GESTURE_RIGHT:
-        Serial.print("Detected RIGHT gesture");
+        Serial.println("Detected RIGHT gesture : LED_BUILTIN");
         digitalWrite(LED_BUILTIN, HIGH);
-        Serial.println(": LED_BUILTIN");
         delay(1000);
         digitalWrite(LED_BUILTIN, LOW);
         break;

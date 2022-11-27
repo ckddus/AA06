@@ -1,7 +1,7 @@
 // db33rgb.js
 
 var serialport = require('serialport');
-var portName = 'COM4';  // check your COM port!!
+var portName = 'COM6';  // check your COM port!!
 var port    =   process.env.PORT || 3000;  // port for DB
 
 var io = require('socket.io').listen(port);
@@ -24,24 +24,24 @@ db.once('open', function callback () {
 // Schema
 var iotSchema = new Schema({
     date : String,
-    temperature : String,
-    humidity : String,
-    luminosity : String,
-    pressure : String,
-    r_ratio : String,
-    g_ratio : String,
-    b_ratio : String,
-    a : String,
-    c : String
+    ax : String,
+    ay : String,
+    az : String,
+    gx : String,
+    gy : String,
+    gz : String,
+    mx : String,
+    my : String,
+    mz : String
     
 });
 // Display data on console in the case of saving data.
 iotSchema.methods.info = function () {
     var iotInfo = this.date
-    ? "Current date: " + this.date +", ax: " + this.temperature 
-    + ", ay: " + this.humidity + ", az: " + this.luminosity + ", gx: " + this.pressure  
-    + ", gy: " + this.r_ratio + ", gz: " + this.g_ratio + ", mx: " + this.b_ratio + ", my: " + this.a
-    + ", mz: " + this.c : "I don't have a date"
+    ? "Current date: " + this.date +", ax: " + this.ax + ", ay: " + this.ay 
+    + ", az: " + this.az + ", gx: " + this.gx  + ", gy: " + this.gy + ", gz: " + this.gz 
+    + ", mx: " + this.mx + ", my: " + this.my + ", mz: " + this.mz 
+    : "I don't have a date"
     console.log("iotInfo: " + iotInfo);
 }
 
@@ -68,15 +68,15 @@ const parser = sp.pipe(new Readline({ delimiter: "\r\n" }));
 //   });
 
 var readData = '';  // this stores the buffer
-var temp = '';
-var humi = '';
-var lux = '';
-var pres = '';
-var rr = '';
-var gg = '';
-var bb = '';
-var a = '';
-var c = '';
+var ax = '';
+var ay = '';
+var az = '';
+var gx = '';
+var gy = '';
+var gz = '';
+var mx = '';
+var my = '';
+var mz = '';
 
 var mdata =[]; // this array stores date and data from multiple sensors
 var firstcommaidx = 0;
@@ -104,32 +104,32 @@ parser.on('data', (data) => { // call back when data is received
 
     // parsing data into signals
     if (readData.lastIndexOf(',') > firstcommaidx && firstcommaidx > 0) {
-        temp = readData.substring(firstcommaidx + 1, secondcommaidx);
-        humi = readData.substring(secondcommaidx + 1, thirdcommaidx);
-        lux = readData.substring(thirdcommaidx + 1, fourthcommaidx);
-        pres = readData.substring(fourthcommaidx + 1, fifthcommaidx);
-        rr = readData.substring(fifthcommaidx + 1, sixthcommaidx);
-        gg = readData.substring(sixthcommaidx + 1, seventhcommaidx);
-        bb = readData.substring(seventhcommaidx + 1, eightthcommaidx);
-        a = readData.substring(eightthcommaidx + 1, readData.indexOf(',',sixthcommaidx+1));
-        c = readData.substring(readData.lastIndexOf(',')+1);
+        ax = readData.substring(0,firstcommaidx);
+        ay = readData.substring(firstcommaidx + 1, secondcommaidx);
+        az = readData.substring(secondcommaidx + 1, thirdcommaidx);
+        gx = readData.substring(thirdcommaidx + 1, fourthcommaidx);
+        gy = readData.substring(fourthcommaidx + 1, fifthcommaidx);
+        gz = readData.substring(fifthcommaidx + 1, sixthcommaidx);
+        mx = readData.substring(sixthcommaidx + 1, seventhcommaidx);
+        my = readData.substring(seventhcommaidx + 1, readData.indexOf(',',eightthcommaidx));
+        mz = readData.substring(readData.lastIndexOf(',')+1);
         
         readData = '';
         
         dStr = getDateString();
         mdata[0]=dStr;    // Date
-        mdata[1]=temp;    // temperature data
-        mdata[2]=humi;    // humidity data
-        mdata[3]=lux;     //  luminosity data
-        mdata[4]=pres;    // pressure data
-        mdata[5]=rr;       // r_ratio
-        mdata[6]=gg;       // g_ratio
-        mdata[7]=bb;       // b_ratio
-        mdata[8]=a;
-        mdata[9]=c;
+        mdata[1]=ax;    // temperature data
+        mdata[2]=ay;    // humidity data
+        mdata[3]=az;     //  luminosity data
+        mdata[4]=gx;    // pressure data
+        mdata[5]=gy;       // r_ratio
+        mdata[6]=gz;       // g_ratio
+        mdata[7]=mx;       // b_ratio
+        mdata[8]=my;
+        mdata[9]=mz;
         //console.log(mdata);
-        var iotData = new Sensor({date:dStr, temperature:temp, humidity:humi, luminosity:lux, pressure:pres, 
-            r_ratio:rr, g_ratio:gg, b_ratio:bb, a:a, c:c});
+        var iotData = new Sensor({date:dStr, ax:ax, ay:ay, az:az, gx:gx, 
+            gy:gy, gz:gz, mx:mx, my:my, mz:mz});
         // save iot data to MongoDB
         iotData.save(function(err,data) {
             if(err) return handleEvent(err);
